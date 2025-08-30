@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feedback | Developer Portfolio</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+      /* ===== BASE STYLES ===== */
+      :root {
+        --primary: #4f46e5;
+        --secondary: #ec4899;
+        --dark: #080808;
+        --light: #ffffff;
+        --gray: #ababab;
+        --dark-gray: #262626;
+        --success: #4caf50;
+        --error: #ef4444;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background-color: var(--dark);
+        color: var(--light);
+        line-height: 1.6;
+      }
+
+      .container {
+        padding: 0 10%;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      section {
+        padding: 80px 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-weight: 700;
+      }
+
+      .btn {
+        display: inline-block;
+        background: var(--primary);
+        color: var(--light);
+        padding: 12px 30px;
+        border-radius: 6px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 16px;
+      }
+
+      .btn:hover {
+        background: #4338ca;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        margin-bottom: 50px;
+        text-align: center;
+        position: relative;
+        color: var(--light);
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--primary);
+      }
+
+      /* ===== HEADER ===== */
+      header {
+        background: var(--dark);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        padding: 20px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--light);
+        text-decoration: none;
+      }
+
+      .logo span {
+        color: var(--primary);
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 30px;
+      }
+
+      .nav-links a {
+        color: var(--light);
+        text-decoration: none;
+        font-weight: 500;
+        position: relative;
+        transition: color 0.3s ease;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -5px;
+        left: 0;
+        background-color: var(--primary);
+        transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .menu-toggle {
+        display: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: var(--light);
+      }
+
+      /* ===== FEEDBACK FORM ===== */
+      .feedback-form {
+        background: var(--dark-gray);
+        padding: 40px;
+        border-radius: 10px;
+        max-width: 800px;
+        margin: 0 auto;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--light);
+        font-weight: 500;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 6px;
+        border: 1px solid #444;
+        background: #333;
+        color: var(--light);
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-group textarea {
+        min-height: 150px;
+        resize: vertical;
+      }
+
+      .form-group select {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        background-size: 15px;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      .rating-container {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .rating-star {
+        font-size: 2rem;
+        color: #444;
+        cursor: pointer;
+        transition: color 0.2s ease;
+      }
+
+      .rating-star:hover,
+      .rating-star.active {
+        color: gold;
+      }
+
+      .error-message {
+        color: var(--error);
+        font-size: 0.8rem;
+        margin-top: 5px;
+        display: none;
+      }
+
+      .success-message {
+        background: var(--success);
+        color: white;
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 25px;
+        text-align: center;
+        display: none;
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 30px;
+      }
+
+      /* ===== FEEDBACK LIST ===== */
+      .feedback-list {
+        margin-top: 50px;
+      }
+
+      .feedback-item {
+        background: var(--dark-gray);
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feedback-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: var(--primary);
+      }
+
+      .feedback-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .feedback-name {
+        font-weight: 600;
+        color: var(--light);
+        font-size: 1.1rem;
+      }
+
+      .feedback-date {
+        color: var(--gray);
+        font-size: 0.8rem;
+      }
+
+      .feedback-rating {
+        color: gold;
+        margin: 10px 0;
+      }
+
+      .feedback-comment {
+        color: var(--gray);
+        line-height: 1.6;
+      }
+
+      .no-feedback {
+        text-align: center;
+        color: var(--gray);
+        padding: 40px 0;
+        font-style: italic;
+      }
+
+      /* ===== MEDIA QUERIES ===== */
+      @media (max-width: 992px) {
+        .container {
+          padding: 0 5%;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: block;
+        }
+
+        .nav-links {
+          position: fixed;
+          top: 80px;
+          left: -100%;
+          width: 100%;
+          height: calc(100vh - 80px);
+          background: var(--dark);
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 30px;
+          transition: left 0.3s ease;
+        }
+
+        .nav-links.active {
+          left: 0;
+        }
+
+        .feedback-form {
+          padding: 25px;
+        }
+
+        .section-title {
+          font-size: 2rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .feedback-form {
+          padding: 20px;
+        }
+
+        .form-actions {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+
+      /* ===== ANIMATIONS ===== */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .animate-fade {
+        opacity: 0;
+        animation: fadeIn 1s ease forwards;
+      }
+
+      .animate-left {
+        opacity: 0;
+        animation: slideInLeft 1s ease forwards;
+      }
+
+      .animate-right {
+        opacity: 0;
+        animation: slideInRight 1s ease forwards;
+      }
+
+      .delay-1 {
+        animation-delay: 0.2s;
+      }
+
+      .delay-2 {
+        animation-delay: 0.4s;
+      }
+
+      .delay-3 {
+        animation-delay: 0.6s;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container">
+        <nav>
+          <a href="../pages/index.html" class="logo">Port<span>folio</span></a>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="../pages/projectupload.html">Projects</a></li>
+            <li><a href="#feedback">Feedback</a></li>
+          </ul>
+          <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Feedback Section -->
+    <section id="feedback">
+      <div class="container">
+        <h2 class="section-title animate-fade">Share Your Feedback</h2>
+
+        <div class="success-message" id="success-message">
+          Thank you for your feedback! Your submission has been received.
+        </div>
+
+        <form
+          id="feedback-form"
+          class="feedback-form animate-left delay-1"
+          action="/Portfolio Junior/backend/pages/validations/process_feedback.php"
+          method="post"
+          autocomplete="off">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Enter your name" />
+            <div class="error-message" id="name-error">
+              Please enter your name
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email" />
+            <div class="error-message" id="email-error">
+              Please enter a valid email
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject">
+              <option value="">Select a subject</option>
+              <option value="General Feedback">General Feedback</option>
+              <option value="Project Inquiry">Project Inquiry</option>
+              <option value="Collaboration">Collaboration</option>
+              <option value="Bug Report">Bug Report</option>
+              <option value="Other">Other</option>
+            </select>
+            <div class="error-message" id="subject-error">
+              Please select a subject
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Rating</label>
+            <div class="rating-container" id="rating-stars">
+              <i class="fas fa-star rating-star" data-rating="1"></i>
+              <i class="fas fa-star rating-star" data-rating="2"></i>
+              <i class="fas fa-star rating-star" data-rating="3"></i>
+              <i class="fas fa-star rating-star" data-rating="4"></i>
+              <i class="fas fa-star rating-star" data-rating="5"></i>
+            </div>
+            <input type="hidden" id="rating" name="rating" value="0" />
+            <div class="error-message" id="rating-error">
+              Please select a rating
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="comment">Your Feedback</label>
+            <textarea
+              id="comment"
+              name="comment"
+              placeholder="Share your thoughts..."></textarea>
+            <div class="error-message" id="comment-error">
+              Please enter your feedback
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn">Submit Feedback</button>
+          </div>
+          <div class="error-message" id="feedbackFormError"></div>
+        </form>
+
+        <div class="feedback-list animate-right delay-2">
+          <h3 class="recent-feedback-heading">Recent Feedback</h3>
+          <div id="feedback-items">
+            <!-- Feedback items will be loaded here -->
+            <div class="no-feedback">
+              No feedback yet. Be the first to share your thoughts!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Mobile menu toggle
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+
+        menuToggle.addEventListener("click", function () {
+          navLinks.classList.toggle("active");
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll(".nav-links a").forEach((link) => {
+          link.addEventListener("click", function () {
+            navLinks.classList.remove("active");
+          });
+        });
+
+        // Feedback form functionality
+        const feedbackForm = document.getElementById("feedback-form");
+        const successMessage = document.getElementById("success-message");
+        const feedbackItemsContainer =
+          document.getElementById("feedback-items");
+        const ratingStars = document.querySelectorAll(".rating-star");
+        const ratingInput = document.getElementById("rating");
+
+        let feedbackData = [];
+        let currentRating = 0;
+
+        // Initialize rating stars
+        function initializeRatingStars() {
+          ratingStars.forEach((star) => {
+            star.addEventListener("click", function () {
+              const rating = parseInt(this.getAttribute("data-rating"));
+              currentRating = rating;
+              ratingInput.value = rating;
+
+              ratingStars.forEach((s, index) => {
+                if (index < rating) {
+                  s.classList.add("active");
+                  s.style.color = "gold";
+                } else {
+                  s.classList.remove("active");
+                  s.style.color = "#444";
+                }
+              });
+
+              document.getElementById("rating-error").style.display = "none";
+            });
+
+            star.addEventListener("mouseover", function () {
+              const rating = parseInt(this.getAttribute("data-rating"));
+
+              ratingStars.forEach((s, index) => {
+                if (index < rating) {
+                  s.style.color = "gold";
+                }
+              });
+            });
+
+            star.addEventListener("mouseout", function () {
+              ratingStars.forEach((s, index) => {
+                if (!s.classList.contains("active")) {
+                  s.style.color = "#444";
+                }
+              });
+            });
+          });
+        }
+
+        // Display feedback items
+        function displayFeedback() {
+          if (feedbackData.length === 0) {
+            feedbackItemsContainer.innerHTML =
+              '<div class="no-feedback">No feedback yet. Be the first to share your thoughts!</div>';
+            return;
+          }
+
+          feedbackItemsContainer.innerHTML = "";
+          feedbackData.forEach((feedback) => {
+            const feedbackItem = document.createElement("div");
+            feedbackItem.className = "feedback-item animate-fade";
+
+            // Create rating stars
+            let ratingStars = "";
+            for (let i = 0; i < 5; i++) {
+              if (i < feedback.rating) {
+                ratingStars +=
+                  '<i class="fas fa-star" style="color: gold;"></i>';
+              } else {
+                ratingStars +=
+                  '<i class="fas fa-star" style="color: #444;"></i>';
+              }
+            }
+
+            const dateStr = feedback.created_at
+              ? new Date(feedback.created_at).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              : "";
+
+            feedbackItem.innerHTML = `
+                        <div class="feedback-header">
+                            <div class="feedback-name">${feedback.name}</div>
+                            <div class="feedback-date">${dateStr}</div>
+                        </div>
+                        <div class="feedback-subject" style="color: var(--primary); margin-bottom: 5px;">${
+                          feedback.subject || ""
+                        }</div>
+                        <div class="feedback-rating">${ratingStars}</div>
+                        <div class="feedback-comment">${feedback.comment}</div>
+                    `;
+
+            feedbackItemsContainer.appendChild(feedbackItem);
+          });
+        }
+
+        function fetchFeedbackFromServer() {
+          feedbackItemsContainer.innerHTML =
+            '<div class="no-feedback">Loading feedback...</div>';
+          fetch("/Portfolio Junior/backend/pages/validations/get_feedback.php")
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.success && Array.isArray(data.feedback)) {
+                feedbackData = data.feedback;
+                displayFeedback();
+              } else {
+                feedbackItemsContainer.innerHTML =
+                  '<div class="no-feedback">Could not load feedback from server.</div>';
+              }
+            })
+            .catch(() => {
+              feedbackItemsContainer.innerHTML =
+                '<div class="no-feedback">Server error loading feedback.</div>';
+            });
+        }
+
+        // Validate form
+        function validateForm() {
+          let isValid = true;
+
+          // Validate name
+          const name = document.getElementById("name").value.trim();
+          if (name === "") {
+            document.getElementById("name-error").style.display = "block";
+            isValid = false;
+          } else {
+            document.getElementById("name-error").style.display = "none";
+          }
+
+          // Validate email
+          const email = document.getElementById("email").value.trim();
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (email === "" || !emailRegex.test(email)) {
+            document.getElementById("email-error").style.display = "block";
+            isValid = false;
+          } else {
+            document.getElementById("email-error").style.display = "none";
+          }
+
+          // Validate subject
+          const subject = document.getElementById("subject").value;
+          if (!subject || subject === "") {
+            document.getElementById("subject-error").style.display = "block";
+            isValid = false;
+          } else {
+            document.getElementById("subject-error").style.display = "none";
+          }
+
+          // Validate rating
+          const ratingVal = parseInt(
+            document.getElementById("rating").value,
+            10
+          );
+          if (isNaN(ratingVal) || ratingVal < 1 || ratingVal > 5) {
+            document.getElementById("rating-error").style.display = "block";
+            isValid = false;
+          } else {
+            document.getElementById("rating-error").style.display = "none";
+          }
+
+          // Validate comment
+          const comment = document.getElementById("comment").value.trim();
+          if (comment === "") {
+            document.getElementById("comment-error").style.display = "block";
+            isValid = false;
+          } else {
+            document.getElementById("comment-error").style.display = "none";
+          }
+
+          return isValid;
+        }
+
+        // Handle form submission
+        feedbackForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          document.getElementById("feedbackFormError").style.display = "none";
+
+          if (!validateForm()) {
+            return;
+          }
+
+          const formData = new FormData(feedbackForm);
+          formData.set("rating", ratingInput.value);
+
+          fetch(feedbackForm.action, {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                successMessage.style.display = "block";
+                document.getElementById("feedbackFormError").style.display =
+                  "none";
+                feedbackForm.reset();
+                currentRating = 0;
+                ratingInput.value = "0";
+                ratingStars.forEach((star) => {
+                  star.classList.remove("active");
+                  star.style.color = "#444";
+                });
+                setTimeout(() => {
+                  successMessage.style.display = "none";
+                }, 5000);
+                fetchFeedbackFromServer(); // Refresh feedback list from server
+              } else if (data.errors) {
+                let errorMsg = Object.values(data.errors).join("<br>");
+                document.getElementById("feedbackFormError").innerHTML =
+                  errorMsg;
+                document.getElementById("feedbackFormError").style.display =
+                  "block";
+              } else {
+                document.getElementById("feedbackFormError").innerHTML =
+                  "An error occurred. Please try again.";
+                document.getElementById("feedbackFormError").style.display =
+                  "block";
+              }
+            })
+            .catch(() => {
+              document.getElementById("feedbackFormError").innerHTML =
+                "Server error. Please try again later.";
+              document.getElementById("feedbackFormError").style.display =
+                "block";
+            });
+        });
+
+        // Initialize
+        initializeRatingStars();
+        fetchFeedbackFromServer();
+
+        // Scroll animations
+        const animateOnScroll = function () {
+          const elements = document.querySelectorAll(
+            ".animate-fade, .animate-left, .animate-right"
+          );
+
+          elements.forEach((element) => {
+            const elementPosition = element.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight / 1.3;
+
+            if (elementPosition < screenPosition) {
+              element.style.opacity = "1";
+              element.style.transform = "translate(0, 0)";
+            }
+          });
+        };
+
+        window.addEventListener("scroll", animateOnScroll);
+        animateOnScroll(); // Run once on page load
+      });
+    </script>
+  </body>
+</html>

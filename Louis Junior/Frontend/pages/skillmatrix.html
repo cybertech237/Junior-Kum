@@ -1,0 +1,862 @@
+ <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skills Matrix | Developer Portfolio</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* ===== GLOBAL STYLES ===== */
+      :root {
+        --primary: #4f46e5;
+        --secondary: #ec4899;
+        --dark: #080808;
+        --light: #ffffff;
+        --gray: #ababab;
+        --dark-gray: #262626;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background-color: var(--dark);
+        color: var(--light);
+        line-height: 1.6;
+      }
+
+      .container {
+        padding: 0 10%;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      section {
+        padding: 80px 0;
+      }
+
+      .btn {
+        display: inline-block;
+        background: var(--primary);
+        color: var(--light);
+        padding: 12px 30px;
+        border-radius: 6px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 16px;
+      }
+
+      .btn:hover {
+        background: #4338ca;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        margin-bottom: 50px;
+        text-align: center;
+        position: relative;
+        color: var(--light);
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--primary);
+      }
+
+      /* ===== HEADER ===== */
+      header {
+        background: var(--dark);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        padding: 20px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--light);
+        text-decoration: none;
+      }
+
+      .logo span {
+        color: var(--primary);
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 30px;
+      }
+
+      .nav-links a {
+        color: var(--light);
+        text-decoration: none;
+        font-weight: 500;
+        position: relative;
+        transition: color 0.3s ease;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -5px;
+        left: 0;
+        background-color: var(--primary);
+        transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .menu-toggle {
+        display: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: var(--light);
+      }
+
+      /* ===== SKILLS HERO ===== */
+      .skills-hero {
+        background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 100%);
+        padding: 150px 0 100px;
+        text-align: center;
+      }
+
+      .skills-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+      }
+
+      .skills-hero p {
+        max-width: 700px;
+        margin: 0 auto;
+        color: var(--gray);
+        font-size: 1.1rem;
+      }
+
+      /* ===== SKILLS MATRIX ===== */
+      .skills-matrix {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        margin-top: 50px;
+      }
+
+      .skills-category {
+        margin-bottom: 40px;
+      }
+
+      .skills-category h3 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .skills-category h3 i {
+        font-size: 1.2rem;
+      }
+
+      .skill-item {
+        margin-bottom: 20px;
+      }
+
+      .skill-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+
+      .skill-name {
+        font-weight: 500;
+      }
+
+      .skill-level {
+        color: var(--gray);
+        font-size: 0.9rem;
+      }
+
+      .skill-bar {
+        height: 8px;
+        background: var(--dark-gray);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .skill-progress {
+        height: 100%;
+        background: var(--primary);
+        border-radius: 4px;
+        transition: width 1s ease;
+      }
+
+      /* Radar Chart Container */
+      .radar-container {
+        background: var(--dark-gray);
+        border-radius: 10px;
+        padding: 30px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Skills Comparison */
+      .skills-comparison {
+        margin-top: 80px;
+      }
+
+      .comparison-tabs {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .comparison-tab {
+        padding: 10px 20px;
+        border-radius: 50px;
+        background: rgba(79, 70, 229, 0.1);
+        border: none;
+        color: var(--light);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .comparison-tab.active {
+        background: var(--primary);
+      }
+
+      .comparison-chart-container {
+        background: var(--dark-gray);
+        border-radius: 10px;
+        padding: 30px;
+        height: 400px;
+      }
+
+      /* Certifications */
+      .certifications {
+        margin-top: 80px;
+      }
+
+      .cert-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+      }
+
+      .cert-card {
+        background: var(--dark-gray);
+        border-radius: 10px;
+        padding: 25px;
+        border-left: 3px solid var(--primary);
+        transition: transform 0.3s ease;
+      }
+
+      .cert-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .cert-card h4 {
+        margin-bottom: 10px;
+      }
+
+      .cert-meta {
+        display: flex;
+        justify-content: space-between;
+        color: var(--gray);
+        font-size: 0.9rem;
+        margin-top: 15px;
+      }
+
+      /* ===== MEDIA QUERIES ===== */
+      @media (max-width: 992px) {
+        .skills-matrix {
+          grid-template-columns: 1fr;
+        }
+
+        .radar-container {
+          height: 400px;
+          margin-top: 50px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: block;
+        }
+
+        .nav-links {
+          position: fixed;
+          top: 80px;
+          left: -100%;
+          width: 100%;
+          height: calc(100vh - 80px);
+          background: var(--dark);
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 30px;
+          transition: left 0.3s ease;
+        }
+
+        .nav-links.active {
+          left: 0;
+        }
+
+        .skills-hero {
+          padding: 120px 0 80px;
+        }
+
+        .skills-hero h1 {
+          font-size: 2.5rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .section-title {
+          font-size: 2rem;
+        }
+
+        .cert-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container">
+        <nav>
+          <a href="index.html" class="logo">Port<span>folio</span></a>
+          <ul class="nav-links">
+            <li><a href="./index.html">Home</a></li>
+            <li><a href="./case-studies.html">Case Studies</a></li>
+            <li><a href="#" class="active">Skills</a></li>
+            <li><a href="./testimonials.html">Testimonials</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+          <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Skills Hero -->
+    <section class="skills-hero">
+      <div class="container">
+        <h1>Skills Matrix</h1>
+        <p>
+          A detailed breakdown of my technical proficiencies and areas of
+          expertise
+        </p>
+      </div>
+    </section>
+
+    <!-- Skills Matrix -->
+    <section class="container">
+      <!-- Skill Submission Form -->
+      <div class="skills-matrix">
+        <div>
+          <form
+            id="add-skill-form"
+            style="
+              background: var(--dark-gray);
+              padding: 30px;
+              border-radius: 10px;
+              margin-bottom: 40px;
+            ">
+            <h3 style="color: var(--primary); margin-bottom: 20px">
+              <i class="fas fa-plus-circle"></i> Add a Skill
+            </h3>
+            <div style="margin-bottom: 15px">
+              <input
+                type="text"
+                name="name"
+                placeholder="Skill Name"
+                required
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border-radius: 5px;
+                  border: 1px solid #444;
+                  background: #222;
+                  color: #fff;
+                " />
+            </div>
+            <div style="margin-bottom: 15px">
+              <input
+                type="text"
+                name="category"
+                placeholder="Category (e.g. Frontend, Backend)"
+                required
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border-radius: 5px;
+                  border: 1px solid #444;
+                  background: #222;
+                  color: #fff;
+                " />
+            </div>
+            <div style="margin-bottom: 15px">
+              <input
+                type="text"
+                name="level"
+                placeholder="Level (e.g. Beginner, Intermediate, Advanced, Expert)"
+                required
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border-radius: 5px;
+                  border: 1px solid #444;
+                  background: #222;
+                  color: #fff;
+                " />
+            </div>
+            <div style="margin-bottom: 15px">
+              <input
+                type="number"
+                name="percentage"
+                placeholder="Proficiency (%)"
+                min="0"
+                max="100"
+                required
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border-radius: 5px;
+                  border: 1px solid #444;
+                  background: #222;
+                  color: #fff;
+                " />
+            </div>
+            <button type="submit" class="btn">Add Skill</button>
+            <div
+              id="add-skill-message"
+              style="margin-top: 10px; color: var(--primary)"></div>
+          </form>
+
+          <div id="skills-list">
+            <!-- Skills will be loaded here -->
+          </div>
+        </div>
+        <div class="radar-container">
+          <canvas id="skillsRadarChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Additional Skills Categories -->
+
+      <!-- Dynamic skills list will be loaded above -->
+
+      <!-- Skills Comparison -->
+      <div class="skills-comparison">
+        <h2 class="section-title">Skills Evolution</h2>
+        <div class="comparison-tabs">
+          <button class="comparison-tab active" data-year="2021">2021</button>
+          <button class="comparison-tab" data-year="2022">2022</button>
+          <button class="comparison-tab" data-year="2023">2023</button>
+        </div>
+        <div class="comparison-chart-container">
+          <canvas id="skillsComparisonChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Certifications -->
+      <div class="certifications">
+        <h2 class="section-title">Certifications</h2>
+        <div class="cert-grid">
+          <div class="cert-card">
+            <h4>AWS Certified Developer</h4>
+            <p>
+              Demonstrated ability to develop and maintain applications on AWS
+            </p>
+            <div class="cert-meta">
+              <span>Amazon Web Services</span>
+              <span>2023</span>
+            </div>
+          </div>
+          <div class="cert-card">
+            <h4>Professional Scrum Master I</h4>
+            <p>
+              Validated understanding of Scrum framework and agile principles
+            </p>
+            <div class="cert-meta">
+              <span>Scrum.org</span>
+              <span>2022</span>
+            </div>
+          </div>
+          <div class="cert-card">
+            <h4>Google UX Design Professional</h4>
+            <p>Completed comprehensive UX design certification program</p>
+            <div class="cert-meta">
+              <span>Google</span>
+              <span>2021</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Mobile menu toggle
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+        menuToggle.addEventListener("click", function () {
+          navLinks.classList.toggle("active");
+        });
+        document.querySelectorAll(".nav-links a").forEach((link) => {
+          link.addEventListener("click", function () {
+            navLinks.classList.remove("active");
+          });
+        });
+
+        // AJAX: Load skills from server
+        function loadSkills() {
+          const skillsList = document.getElementById("skills-list");
+          skillsList.innerHTML =
+            '<div style="color:var(--gray);">Loading skills...</div>';
+          fetch("/Portfolio Junior/backend/pages/validations/get_skills.php")
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.success && Array.isArray(data.skills)) {
+                allSkills = data.skills;
+                if (data.skills.length === 0) {
+                  skillsList.innerHTML =
+                    '<div style="color:var(--gray);">No skills found.</div>';
+                  updateRadarChart([]);
+                  updateComparisonChart("2023");
+                  return;
+                }
+                // Group by category
+                const grouped = {};
+                data.skills.forEach((skill) => {
+                  if (!grouped[skill.category]) grouped[skill.category] = [];
+                  grouped[skill.category].push(skill);
+                });
+                let html = "";
+                for (const cat in grouped) {
+                  html += `<div class="skills-category"><h3 style="color:var(--primary);"><i class="fas fa-caret-right"></i> ${cat}</h3>`;
+                  grouped[cat].forEach((skill) => {
+                    html += `<div class="skill-item">
+                      <div class="skill-header">
+                        <span class="skill-name">${skill.name}</span>
+                        <span class="skill-level">${skill.level} (${skill.percentage}%)</span>
+                      </div>
+                      <div class="skill-bar">
+                        <div class="skill-progress" style="width:${skill.percentage}%"></div>
+                      </div>
+                    </div>`;
+                  });
+                  html += "</div>";
+                }
+                skillsList.innerHTML = html;
+                updateRadarChart(data.skills);
+                // Default to 2023 for comparison
+                updateComparisonChart("2023");
+              } else {
+                allSkills = [];
+                skillsList.innerHTML =
+                  '<div style="color:var(--error);">Could not load skills.</div>';
+                updateRadarChart([]);
+                updateComparisonChart("2023");
+              }
+            })
+            .catch(() => {
+              allSkills = [];
+              skillsList.innerHTML =
+                '<div style="color:var(--error);">Server error loading skills.</div>';
+              updateRadarChart([]);
+              updateComparisonChart("2023");
+            });
+        }
+
+        // AJAX: Add skill
+        document
+          .getElementById("add-skill-form")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const msg = document.getElementById("add-skill-message");
+            msg.textContent = "Adding...";
+            const formData = new FormData(form);
+            fetch("/Portfolio Junior/backend/pages/validations/add_skill.php", {
+              method: "POST",
+              body: formData,
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.success) {
+                  msg.style.color = "var(--success)";
+                  msg.textContent = data.message;
+                  form.reset();
+                  loadSkills();
+                } else if (data.errors) {
+                  msg.style.color = "var(--error)";
+                  msg.textContent = Object.values(data.errors).join(" | ");
+                } else {
+                  msg.style.color = "var(--error)";
+                  msg.textContent = data.error || "Error adding skill.";
+                }
+              })
+              .catch(() => {
+                msg.style.color = "var(--error)";
+                msg.textContent = "Server error. Please try again.";
+              });
+          });
+
+        // Initial load
+        loadSkills();
+
+        // Radar chart instance and update function
+        let radarChart;
+        function updateRadarChart(skills) {
+          // Define categories to show on radar
+          const categories = [
+            "Frontend",
+            "Backend",
+            "Database",
+            "DevOps",
+            "UI/UX",
+            "Mobile",
+          ];
+          // For each category, get the highest percentage skill (or 0 if none)
+          const data = categories.map((cat) => {
+            const catSkills = skills.filter((s) =>
+              s.category.toLowerCase().includes(cat.toLowerCase())
+            );
+            if (catSkills.length === 0) return 0;
+            // Use the highest percentage in the category
+            return Math.max(
+              ...catSkills.map((s) => parseInt(s.percentage, 10))
+            );
+          });
+          const ctx = document
+            .getElementById("skillsRadarChart")
+            .getContext("2d");
+          if (radarChart) radarChart.destroy();
+          radarChart = new Chart(ctx, {
+            type: "radar",
+            data: {
+              labels: categories,
+              datasets: [
+                {
+                  label: "Technical Skills",
+                  data: data,
+                  backgroundColor: "rgba(79, 70, 229, 0.2)",
+                  borderColor: "rgba(79, 70, 229, 1)",
+                  borderWidth: 2,
+                  pointBackgroundColor: "rgba(79, 70, 229, 1)",
+                  pointRadius: 4,
+                },
+              ],
+            },
+            options: {
+              scales: {
+                r: {
+                  angleLines: {
+                    color: "rgba(255, 255, 255, 0.1)",
+                  },
+                  grid: {
+                    color: "rgba(255, 255, 255, 0.1)",
+                  },
+                  suggestedMin: 0,
+                  suggestedMax: 100,
+                  pointLabels: {
+                    color: "white",
+                    font: {
+                      size: 12,
+                    },
+                  },
+                  ticks: {
+                    backdropColor: "transparent",
+                    color: "rgba(255, 255, 255, 0.5)",
+                    showLabelBackdrop: false,
+                  },
+                },
+              },
+              plugins: {
+                legend: {
+                  labels: {
+                    color: "white",
+                    font: {
+                      size: 14,
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+        // Initial radar chart (empty)
+        updateRadarChart([]);
+
+        // Skills Comparison Chart (dynamic)
+        const comparisonCtx = document
+          .getElementById("skillsComparisonChart")
+          .getContext("2d");
+        let comparisonChart;
+        // We'll use the same categories as the radar chart
+        const comparisonCategories = [
+          "Frontend",
+          "Backend",
+          "Database",
+          "DevOps",
+          "UI/UX",
+        ];
+        // Store all skills for comparison
+        let allSkills = [];
+        // Helper to get max percentage for a category and year
+        function getCategoryMax(skills, category, year) {
+          // If year is not used in your DB, just use all skills
+          // If you want to support year, add a 'year' field to your DB and filter here
+          const catSkills = skills.filter((s) =>
+            s.category.toLowerCase().includes(category.toLowerCase())
+          );
+          if (catSkills.length === 0) return 0;
+          return Math.max(...catSkills.map((s) => parseInt(s.percentage, 10)));
+        }
+        function updateComparisonChart(year) {
+          // For now, use all skills for all years (unless you add a year field in DB)
+          const data = comparisonCategories.map((cat) =>
+            getCategoryMax(allSkills, cat, year)
+          );
+          const datasets = [
+            {
+              label: year,
+              data: data,
+              borderColor:
+                year === "2021"
+                  ? "rgba(236, 72, 153, 1)"
+                  : year === "2022"
+                  ? "rgba(79, 70, 229, 1)"
+                  : "rgba(16, 185, 129, 1)",
+              backgroundColor: "transparent",
+              tension: 0.3,
+            },
+          ];
+          if (comparisonChart) {
+            comparisonChart.data.labels = comparisonCategories;
+            comparisonChart.data.datasets = datasets;
+            comparisonChart.update();
+          } else {
+            comparisonChart = new Chart(comparisonCtx, {
+              type: "line",
+              data: {
+                labels: comparisonCategories,
+                datasets: datasets,
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    max: 100,
+                    grid: {
+                      color: "rgba(255, 255, 255, 0.1)",
+                    },
+                    ticks: {
+                      color: "rgba(255, 255, 255, 0.7)",
+                    },
+                  },
+                  x: {
+                    grid: {
+                      color: "rgba(255, 255, 255, 0.1)",
+                    },
+                    ticks: {
+                      color: "rgba(255, 255, 255, 0.7)",
+                    },
+                  },
+                },
+                plugins: {
+                  legend: {
+                    labels: {
+                      color: "white",
+                      font: {
+                        size: 14,
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          }
+        }
+
+        // Skills comparison tabs
+        document.querySelectorAll(".comparison-tab").forEach((tab) => {
+          tab.addEventListener("click", function () {
+            document
+              .querySelectorAll(".comparison-tab")
+              .forEach((t) => t.classList.remove("active"));
+            this.classList.add("active");
+            updateComparisonChart(this.dataset.year);
+          });
+        });
+
+        // Animate skill bars on scroll
+        const animateSkillBars = function () {
+          const skillBars = document.querySelectorAll(".skill-progress");
+          const windowHeight = window.innerHeight;
+          skillBars.forEach((bar) => {
+            const position = bar.getBoundingClientRect().top;
+            if (position < windowHeight - 100) {
+              const width = bar.style.width;
+              bar.style.width = "0";
+              setTimeout(() => {
+                bar.style.width = width;
+              }, 100);
+            }
+          });
+        };
+        window.addEventListener("scroll", animateSkillBars);
+        animateSkillBars();
+      });
+    </script>
+  </body>
+</html>
