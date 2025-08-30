@@ -1,0 +1,2 @@
+# Junior-Kum
+my portfolio 
